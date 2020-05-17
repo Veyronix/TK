@@ -1,0 +1,20 @@
+version: '3'
+services:
+  ca-backend:
+    build: .
+    ports:
+      - "5000:5000"
+    networks:
+      - ca-net
+  ca-front:
+    container_name: "ca-front"
+    image: httpd:2.4
+    volumes:
+      - ./frontend/dist/:/usr/local/apache2/htdocs/
+      - ./custom-httpd.conf:/usr/local/apache2/conf/httpd.conf
+    ports:
+      - "8080:80"
+    networks:
+      - ca-net
+networks:
+  ca-net:

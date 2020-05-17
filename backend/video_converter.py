@@ -1,18 +1,19 @@
-
 import ffmpeg
-import uuid
 
-def convert_video(format, filename):
-    filename_without_ext = filename.split('.')[0]
-    new_filename = filename_without_ext + '.' + format
-    ffmpeg.input(filename)\
-        .output(new_filename)\
+
+def convert_video(format, filename, new_filename, video_status):
+    # filename_without_ext = filename.split('.')[0]
+    new_filename_with_ext = new_filename + '.' + format
+    ffmpeg.input(filename) \
+        .output(new_filename_with_ext) \
         .run()
 
+    video_status.update({new_filename: True})
     return new_filename
 
-def simple_edit_video(filename, operations):
-    tmp_filename = str(uuid.uuid4()) + '.' + video_extension(filename)
+
+def simple_edit_video(filename, operations, new_filename, video_status):
+    tmp_filename = new_filename + '.' + video_extension(filename)
     stream = ffmpeg.input(filename)
     if 'hflip' in operations:
         stream = stream.hflip()
@@ -22,6 +23,7 @@ def simple_edit_video(filename, operations):
     stream.output(tmp_filename) \
         .run()
 
+    video_status.update({new_filename: True})
     return tmp_filename
 
 
